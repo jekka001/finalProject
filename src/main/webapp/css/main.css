@@ -1,0 +1,56 @@
+.fond{
+    background: url("/image/Ship.jpg");
+}
+/*3 pre-last?*/
+.form_menu{
+    position: fixed;
+    margin-left: 85%;
+}
+.field_menu{
+    border-radius: 5px;
+    background: #AABB2F;
+    border-color: #AABB2F;
+    color:#235D79;
+    font-size: 20px;
+}
+.main_name{
+    font-family: sans-serif;
+    font-size: 30px;
+    padding-top: 5%;
+    text-align: center;
+    color:	#DCF900;
+}
+.form_sign_in{
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    background: linear-gradient(to bottom , #DCF900 1%, #086FA1 15%,#8F04A8 100%);
+    margin:10% 35% 0 35%;
+    padding-bottom: 2%;
+    width:30%;
+    text-align: center;
+    font-size: 20px;
+}
+/*3 last*/
+/*1 - 1 center.*/
+.info_sign_in{
+    font-family: sans-serif;
+    display: block;
+    padding: 5% 10%;
+    color:	#DCF900;
+}
+.field_sign_in{
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    margin:1% 20%;
+    display: block;
+    text-align: center;
+}
+.sign_in_user{
+    background-color: #034769;
+    border: #3914AF;
+    color:#DCF900;
+    border-radius: 5px;
+    font-size: 25px;
+    margin-top:2%;
+}
