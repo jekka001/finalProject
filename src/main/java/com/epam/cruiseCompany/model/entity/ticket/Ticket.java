@@ -1,13 +1,13 @@
 package com.epam.cruiseCompany.model.entity.ticket;
 
-import com.epam.cruiseCompany.model.entity.people.Client;
+
+import com.epam.cruiseCompany.model.entity.people.User;
 
 public class Ticket {
     protected int id;
     private double price;
     private Status status;
-    private Client client;
-    private TicketClass ticketClass;
+    private User user;
 
     public int getId() {
         return id;
@@ -27,28 +27,21 @@ public class Ticket {
     public void setStatus(Status status) {
         this.status = status;
     }
-    public Client getClient() {
-        return client;
+    public User getUser() {
+        return user;
     }
-    public void setClient(Client client) {
-        this.client = client;
-    }
-    public TicketClass getTicketClass() {
-        return ticketClass;
-    }
-    public void setTicketClass(TicketClass ticketClass) {
-        this.ticketClass = ticketClass;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Ticket() {
-        this(0, 0, Status.NO_STATUS, new Client(), TicketClass.NO_CLASS);
+        this(0, 0, Status.NO_STATUS, new User());
     }
 
-    public Ticket(int id, double price, Status status, Client client, TicketClass ticketClass) {
+    public Ticket(int id, double price, Status status, User user) {
         this.id = id;
         this.price = price;
         this.status = status;
-        this.client = client;
-        this.ticketClass = ticketClass;
+        this.user = user;
     }
 }

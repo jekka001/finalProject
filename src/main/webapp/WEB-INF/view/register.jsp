@@ -7,16 +7,16 @@
     <meta name="author" content = "Zagrebelnyi">
     <title>CruiseCompany</title>
 
-    <link rel="stylesheet" type="text/css" href="../css/register.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/register.css">
 
 </head>
 <body class = "fond">
-<form method="Get" action = "/SignIn" class= "form_menu">
+<form method="Get" action = "MainMenu" class= "form_menu">
     <input type="submit" name="Menu" value="Sign in" class="field_menu">
     <input type="submit" name="Menu" value="Register" class="field_menu">
 </form>
 <div class = "main_name">CruiseCompany</div>
-<form method="Post" action ="/register" class = "form_register">
+<form method="Post" action ="MainMenu" class = "form_register">
     <span class = "info_register">
         You register not on our site, but on the cruise of your dreams
     </span>

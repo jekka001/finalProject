@@ -8,11 +8,12 @@ import com.epam.cruiseCompany.model.entity.people.Crew;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-//comply
+//+
 public class ShipDao extends AbstractDao<Ship>{
     private static final String SQL_INSERT = "INSERT INTO ship(name, passengerCapacity) VALUES(?, ?)";
     private static final String SQL_FIND_ALL = "SELECT * FROM ship";
     private static final String SQL_UPDATE = "UPDATE ship SET name = ?, passengerCapacity = ? WHERE id = ?";
+    private static final String SQL_UPDATE_CRUISE_ID = "UPDATE ship SET cruise_id = ? WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM ship WHERE id = ?";
     private DaoFactory parentFactory = MySqlDaoFactory.getInstance();
 
@@ -74,6 +75,9 @@ public class ShipDao extends AbstractDao<Ship>{
             if(generatedKeys.next()) {
                 object.setId(generatedKeys.getInt("id"));
             }
+
+            createCrew(object.getCrew(),object.getId());
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,6 +93,8 @@ public class ShipDao extends AbstractDao<Ship>{
             preparedStatement.setInt(3, object.getId());
 
             preparedStatement.execute();
+
+            updateCrew(object.getCrew(),object.getId());
 
             return object;
         } catch (SQLException e) {
@@ -108,6 +114,20 @@ public class ShipDao extends AbstractDao<Ship>{
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
 
+            deleteCrew(id);
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateCruiseId(Ship ship, int cruiseId){
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_CRUISE_ID)) {
+            preparedStatement.setInt(1, cruiseId);
+            preparedStatement.setInt(2, ship.getId());
+            preparedStatement.execute();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -122,12 +142,41 @@ public class ShipDao extends AbstractDao<Ship>{
             Ship tempShip = new Ship();
             tempShip.setId(resultSet.getInt("id"));
             tempShip.setName(resultSet.getString("name"));
-            tempShip.setPassengerCapacity(resultSet.getInt("passengerCapacity"));
-            tempShip.setCrew(crewDao.findByInt("idShip", resultSet.getInt("id")));
+            tempShip.setPassengerCapacity(resultSet.getInt("passenger_capacity"));
+            tempShip.setCrew(crewDao.findByInt("ship_id", resultSet.getInt("id")));
             shipList.add(tempShip);
         }
         return shipList;
     }
 
     private String getSelectQuery(String type){return SQL_FIND_ALL + " WHERE " + type + " = ?";}
+
+    private void createCrew(List<Crew> crewList, int shipId){
+        CrewDao crewDao = parentFactory.createCrewDao(connection);
+        for(Crew crew : crewList) {
+            crewDao.create(crew);
+            crewDao.updateShipId(crew, shipId);
+        }
+    }
+    private void updateCrew(List<Crew> crewList, int shipId){
+        CrewDao crewDao = parentFactory.createCrewDao(connection);
+        List<Crew> newCrew = new ArrayList<>();
+        deleteCrew(shipId);
+        for(Crew crew : crewList) {
+            if (crewDao.findById(crew.getId()) != null){
+                    crewDao.delete(crew);
+                    newCrew.add(crew);
+            }else {
+                newCrew.add(crew);
+            }
+        }
+        createCrew(newCrew, shipId);
+    }
+    private void deleteCrew(int shipId){
+        CrewDao crewDao = parentFactory.createCrewDao(connection);
+        List<Crew> crewList = crewDao.findByInt("ship_id", shipId);
+        for(Crew crew : crewList){
+            crewDao.delete(crew);
+        }
+    }
 }

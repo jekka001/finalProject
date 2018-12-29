@@ -2,29 +2,27 @@ package com.epam.cruiseCompany.dao.impl;
 
 import com.epam.cruiseCompany.dao.factory.DaoFactory;
 import com.epam.cruiseCompany.dao.factory.impl.MySqlDaoFactory;
-import com.epam.cruiseCompany.model.entity.people.Client;
-import com.epam.cruiseCompany.model.entity.ticket.Status;
-import com.epam.cruiseCompany.model.entity.ticket.Ticket;
-import com.epam.cruiseCompany.model.entity.ticket.TicketClass;
+import com.epam.cruiseCompany.model.entity.people.User;
+import com.epam.cruiseCompany.model.entity.ticket.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-//maybe comply
-public class TicketDao extends AbstractDao<Ticket>{
-    private static final String SQL_INSERT = "INSERT INTO ticket(price, status, idClient) VALUES(?, ?, ?)";
-    private static final String SQL_FIND_ALL = "SELECT * FROM ticket";
-    private static final String SQL_UPDATE = "UPDATE ticket SET price = ?, status = ?, id_Client = ?" +
-                                    " WHERE id = ?";
-    private static final String SQL_DELETE = "DELETE FROM ticket WHERE id = ?";
+//+
+public class ExcursionTicketDao extends AbstractDao<ExcursionTicket>{
+    private static final String SQL_INSERT = "INSERT INTO excursion_ticket(price, status, user_id) VALUES(?, ?, ?)";
+    private static final String SQL_FIND_ALL = "SELECT * FROM excursion_ticket";
+    private static final String SQL_UPDATE = "UPDATE excursion_ticket SET price = ?, status = ?, user_id = ? WHERE id = ?";
+    private static final String SQL_UPDATE_EXCURSION_ID = "UPDATE excursion_ticket SET excursion_id = ? WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM excursion_ticket WHERE id = ?";
     private DaoFactory parentFactory = MySqlDaoFactory.getInstance();
 
-    public TicketDao(Connection connection) {
+    public ExcursionTicketDao(Connection connection) {
         super(connection);
     }
 
     @Override
-    public List<Ticket> findAll() {
+    public List<ExcursionTicket> findAll() {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL);
             return parseSet(resultSet);
@@ -34,11 +32,11 @@ public class TicketDao extends AbstractDao<Ticket>{
         return null;
     }
     @Override
-    public Ticket findById(int id) {
-       return findByInt("id", id).get(0);
+    public ExcursionTicket findById(int id) {
+        return findByInt("id", id).get(0);
     }
     @Override
-    public List<Ticket> findByString(String type, String value) {
+    public List<ExcursionTicket> findByString(String type, String value) {
         String currentSql = getSelectQuery(type);
         try(PreparedStatement preparedStatement = connection.prepareStatement(currentSql)){
             preparedStatement.setString(1, value);
@@ -51,7 +49,7 @@ public class TicketDao extends AbstractDao<Ticket>{
     }
 
     @Override
-    public List<Ticket> findByInt(String type, int value) {
+    public List<ExcursionTicket> findByInt(String type, int value) {
         String currentSql = getSelectQuery(type);
         try(PreparedStatement preparedStatement = connection.prepareStatement(currentSql)){
             preparedStatement.setInt(1, value);
@@ -65,12 +63,11 @@ public class TicketDao extends AbstractDao<Ticket>{
 
 
     @Override
-    public boolean create(Ticket object) {
+    public boolean create(ExcursionTicket object) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setDouble(1, object.getPrice());
             preparedStatement.setString(2, object.getStatus().toString());
-            preparedStatement.setInt(3, object.getClient().getId());
-            //preparedStatement.setString(4, object.getTicketClass().toString());
+            preparedStatement.setInt(3, object.getUser().getId());
             preparedStatement.execute();
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -82,15 +79,14 @@ public class TicketDao extends AbstractDao<Ticket>{
             e.printStackTrace();
         }
         return false;
-    }//not really, do it later.
+    }
     @Override
-    public Ticket update(Ticket object) {
+    public ExcursionTicket update(ExcursionTicket object) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE)){
             preparedStatement.setDouble(1, object.getPrice());
             preparedStatement.setString(2, object.getStatus().toString());
-            preparedStatement.setInt(3, object.getClient().getId());
-            //preparedStatement.setString(4, object.getTicketClass().toString());
-            preparedStatement.setInt(5, object.getId());
+            preparedStatement.setInt(3, object.getUser().getId());
+            preparedStatement.setInt(4, object.getId());
 
             preparedStatement.execute();
             return object;
@@ -98,11 +94,10 @@ public class TicketDao extends AbstractDao<Ticket>{
             e.printStackTrace();
         }
         return null;
-    }//not really, do it later.
-
+    }
 
     @Override
-    public boolean delete(Ticket object) {
+    public boolean delete(ExcursionTicket object) {
         return delete(object.getId());
     }
     @Override
@@ -117,20 +112,30 @@ public class TicketDao extends AbstractDao<Ticket>{
         return false;
     }
 
-    private List<Ticket> parseSet(ResultSet resultSet) throws SQLException{
-        AbstractDao<Client> clientDao = parentFactory.createClientDao(connection);
-        List<Ticket> ticketList = new ArrayList<>();
+    public boolean updateExcursionId(ExcursionTicket excursionTicket, int excursionId){
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_EXCURSION_ID)) {
+            preparedStatement.setInt(1, excursionId);
+            preparedStatement.setInt(2, excursionTicket.getId());
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private List<ExcursionTicket> parseSet(ResultSet resultSet) throws SQLException{
+        AbstractDao<User> userDao = parentFactory.createClientDao(connection);
+        List<ExcursionTicket> ticketList = new ArrayList<>();
         while (resultSet.next()){
-            Ticket tempTicket = new Ticket();
+            ExcursionTicket tempTicket = new ExcursionTicket();
             tempTicket.setId(resultSet.getInt("id"));
             tempTicket.setPrice(resultSet.getDouble("price"));
             tempTicket.setStatus(Status.valueOf(resultSet.getString("status")));
-            tempTicket.setClient(clientDao.findById(resultSet.getInt("idClient")));
-            tempTicket.setTicketClass(TicketClass.valueOf(resultSet.getString("ticketClass")));
+            tempTicket.setUser(userDao.findById(resultSet.getInt("user_id")));
             ticketList.add(tempTicket);
         }
         return ticketList;
-    }// not really, do it later
-
+    }
     private String getSelectQuery(String type){return SQL_FIND_ALL + " WHERE " + type + " = ?";}
 }

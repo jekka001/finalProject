@@ -2,7 +2,7 @@ package com.epam.cruiseCompany.model;
 
 import com.epam.cruiseCompany.model.entity.Port;
 import com.epam.cruiseCompany.model.entity.Ship;
-import com.epam.cruiseCompany.model.entity.ticket.Ticket;
+import com.epam.cruiseCompany.model.entity.ticket.CruiseTicket;
 
 import java.time.Instant;
 import java.util.*;
@@ -14,8 +14,8 @@ public class Cruise {
     private String cityDeparture;
     private Instant startCruise;
     private Instant durationCruise;
-    private Ship ship;
-    private List<Ticket> passengers;
+    private List<Ship> ship;
+    private List<CruiseTicket> tickets;
 
     public int getId() {
         return id;
@@ -53,26 +53,26 @@ public class Cruise {
     public void setDurationCruise(Instant durationCruise) {
         this.durationCruise = durationCruise;
     }
-    public Ship getShip() {
+    public List<Ship> getShip() {
         return ship;
     }
-    public void setShip(Ship ship) {
+    public void setShip(List<Ship> ship) {
         this.ship = ship;
     }
-    public List<Ticket> getPassengers() {
-        return passengers;
+    public List<CruiseTicket> getTickets() {
+        return tickets;
     }
-    public void setPassengers(List<Ticket> passengers) {
-        this.passengers = passengers;
+    public void setTickets(List<CruiseTicket> tickets) {
+        this.tickets = tickets;
     }
 
     public Cruise() {
-        this(0,"noName",new ArrayList<>(),"noCity",Instant.now(), Instant.now(),
-                new Ship(), new ArrayList<>());
+        this(0, "noName", new ArrayList<>(), "noCityDeparture", Instant.now(),
+                Instant.now(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Cruise(int id, String name, List<Port> ports, String cityDeparture, Instant startCruise,
-                  Instant durationCruise, Ship ship, List<Ticket> passengers) {
+                  Instant durationCruise, List<Ship> ship, List<CruiseTicket> tickets) {
         this.id = id;
         this.name = name;
         this.ports = ports;
@@ -80,6 +80,6 @@ public class Cruise {
         this.startCruise = startCruise;
         this.durationCruise = durationCruise;
         this.ship = ship;
-        this.passengers = passengers;
+        this.tickets = tickets;
     }
 }

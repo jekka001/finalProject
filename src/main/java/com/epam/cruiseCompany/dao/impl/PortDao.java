@@ -8,7 +8,7 @@ import com.epam.cruiseCompany.model.entity.Port;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-//comply
+//+
 public class PortDao extends AbstractDao<Port>{
     private static final String SQL_INSERT = "INSERT INTO port(name) VALUES(?)";
     private static final String SQL_FIND_ALL = "SELECT * FROM port";
@@ -73,6 +73,7 @@ public class PortDao extends AbstractDao<Port>{
             if(generatedkeys.next()){
                 object.setId(generatedkeys.getInt("id"));
             }
+            createExcursion(object.getExcursions(),object.getId());
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,6 +88,7 @@ public class PortDao extends AbstractDao<Port>{
             preparedStatement.setInt(2, object.getId());
 
             preparedStatement.execute();
+            updateExcursion(object.getExcursions(),object.getId());
             return object;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,6 +106,7 @@ public class PortDao extends AbstractDao<Port>{
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE)) {
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
+            deleteExcursion(id);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,13 +115,13 @@ public class PortDao extends AbstractDao<Port>{
     }
 
     private List<Port> parseSet(ResultSet resultSet) throws SQLException {
+        AbstractDao<Excursion> excursionDao = parentFactory.createExcursionDao(connection);
         List<Port> shipList = new ArrayList<>();
         while(resultSet.next()){
-            AbstractDao<Excursion> excursionDao = parentFactory.createExcursionDao(connection);
             Port tempPort = new Port();
             tempPort.setId(resultSet.getInt("id"));
             tempPort.setName(resultSet.getString("name"));
-            tempPort.setExcursions(excursionDao.findByInt("idPort", resultSet.getInt("id")));
+            tempPort.setExcursions(excursionDao.findByInt("port_id", resultSet.getInt("id")));
             shipList.add(tempPort);
         }
         return shipList;
@@ -126,4 +129,32 @@ public class PortDao extends AbstractDao<Port>{
 
     private String getSelectQuery(String type){return SQL_FIND_ALL + " WHERE " + type + " = ?";}
 
+    private void createExcursion(List<Excursion> excursionList, int portId){
+        ExcursionDao excursionDao = parentFactory.createExcursionDao(connection);
+        for(Excursion excursion : excursionList) {
+            excursionDao.create(excursion);
+            excursionDao.updatePortId(excursion, portId);
+        }
+    }
+    private void updateExcursion(List<Excursion> excursionList, int portId){
+        ExcursionDao excursionDao = parentFactory.createExcursionDao(connection);
+        List<Excursion> newExcursion = new ArrayList<>();
+        deleteExcursion(portId);
+        for(Excursion excursion : excursionList) {
+            if (excursionDao.findById(excursion.getId()) != null){
+                excursionDao.delete(excursion);
+                newExcursion.add(excursion);
+            }else {
+                newExcursion.add(excursion);
+            }
+        }
+        createExcursion(newExcursion, portId);
+    }
+    private void deleteExcursion(int portId){
+        ExcursionDao excursionDao = parentFactory.createExcursionDao(connection);
+        List<Excursion> excursionList = excursionDao.findByInt("port_id", portId);
+        for(Excursion excursion : excursionList){
+            excursionDao.delete(excursion);
+        }
+    }
 }

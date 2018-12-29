@@ -1,25 +1,26 @@
 package com.epam.cruiseCompany.dao.impl;
 
-import com.epam.cruiseCompany.model.entity.people.Client;
+import com.epam.cruiseCompany.model.entity.people.Role;
+import com.epam.cruiseCompany.model.entity.people.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-//comply
-public class ClientDao extends AbstractDao<Client> {
-    private static final String SQL_INSERT = "INSERT INTO client(email, surName, name, password) " +
-                                            "VALUES(?, ?, ?, ?)";
-    private static final String SQL_FIND_ALL = "SELECT * FROM client";
-    private static final String SQL_UPDATE = "UPDATE client SET email = ?, surName = ?, name = ?, password = ? " +
+//+
+public class UserDao extends AbstractDao<User> {
+    private static final String SQL_INSERT = "INSERT INTO user(name, surname, email, password, role) " +
+                                            "VALUES(?, ?, ?, ?, ?)";
+    private static final String SQL_FIND_ALL = "SELECT * FROM user";
+    private static final String SQL_UPDATE = "UPDATE user SET name = ?, surname = ?, email = ?, password = ?, role = ? " +
                                             "WHERE id = ?";
-    private static final String SQL_DELETE = "DELETE FROM client WHERE id = ?";
+    private static final String SQL_DELETE = "DELETE FROM user WHERE id = ?";
 
-    public ClientDao(Connection connection) {
+    public UserDao(Connection connection) {
         super(connection);
     }
 
     @Override
-    public List<Client> findAll() {
+    public List<User> findAll() {
         try(Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL);
             return parseSet(resultSet);
@@ -30,16 +31,15 @@ public class ClientDao extends AbstractDao<Client> {
     }
 
     @Override
-    public Client findById(int id) {
+    public User findById(int id) {
         return findByInt("id", id).get(0);
     }
 
     @Override
-    public List<Client> findByString(String type, String value) {
+    public List<User> findByString(String type, String value) {
         String currentSql = getSelectQuery(type);
         try (PreparedStatement preparedStatement = connection.prepareStatement(currentSql)){
             preparedStatement.setString(1, value);
-
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseSet(resultSet);
         } catch (SQLException e) {
@@ -49,7 +49,7 @@ public class ClientDao extends AbstractDao<Client> {
     }
 
     @Override
-    public List<Client> findByInt(String type, int value) {
+    public List<User> findByInt(String type, int value) {
         String currentSql = getSelectQuery(type);
         try (PreparedStatement preparedStatement = connection.prepareStatement(currentSql)){
             preparedStatement.setInt(1, value);
@@ -63,14 +63,14 @@ public class ClientDao extends AbstractDao<Client> {
     }
 
     @Override
-    public boolean create(Client object) {
+    public boolean create(User object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, object.getEmail());
-            preparedStatement.setString(2, object.getSurName());
-            preparedStatement.setString(3, object.getName());
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setString(2, object.getSurname());
+            preparedStatement.setString(3, object.getEmail());
             preparedStatement.setString(4, object.getPassword());
-
+            preparedStatement.setString(5, object.getRole().name());
             preparedStatement.execute();
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -85,14 +85,14 @@ public class ClientDao extends AbstractDao<Client> {
     }
 
     @Override
-    public Client update(Client object) {
+    public User update(User object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
-            preparedStatement.setString(1, object.getEmail());
-            preparedStatement.setString(2, object.getSurName());
-            preparedStatement.setString(3, object.getName());
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setString(2, object.getSurname());
+            preparedStatement.setString(3, object.getEmail());
             preparedStatement.setString(4, object.getPassword());
-            preparedStatement.setInt(5, object.getId());
+            preparedStatement.setString(5, object.getRole().name());
 
             preparedStatement.execute();
             return object;
@@ -103,7 +103,7 @@ public class ClientDao extends AbstractDao<Client> {
     }
 
     @Override
-    public boolean delete(Client object) {
+    public boolean delete(User object) {
         return delete(object.getId());
     }
 
@@ -120,18 +120,19 @@ public class ClientDao extends AbstractDao<Client> {
         return false;
     }
 
-    private List<Client> parseSet(ResultSet resultSet) throws SQLException{
-        List<Client> clientList = new ArrayList<>();
+    private List<User> parseSet(ResultSet resultSet) throws SQLException{
+        List<User> userList = new ArrayList<>();
         while(resultSet.next()){
-            Client client = new Client();
-            client.setId(resultSet.getInt("id"));
-            client.setEmail(resultSet.getString("email"));
-            client.setSurName(resultSet.getString("surName"));
-            client.setName(resultSet.getString("name"));
-            client.setPassword(resultSet.getString("password"));
-            clientList.add(client);
+            User user = new User();
+            user.setId(resultSet.getInt("id"));
+            user.setName(resultSet.getString("name"));
+            user.setSurname(resultSet.getString("surname"));
+            user.setEmail(resultSet.getString("email"));
+            user.setPassword(resultSet.getString("password"));
+            user.setRole(Role.valueOf(resultSet.getString("role")));
+            userList.add(user);
         }
-        return clientList;
+        return userList;
     }
     private String getSelectQuery(String type){return SQL_FIND_ALL + " WHERE " + type + " = ?";}
 }

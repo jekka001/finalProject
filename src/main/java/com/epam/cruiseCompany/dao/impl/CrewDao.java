@@ -5,12 +5,14 @@ import com.epam.cruiseCompany.model.entity.people.Crew;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-// maybe comply
+// +
 public class CrewDao extends AbstractDao<Crew> {
-    private static final String SQL_INSERT = "INSERT INTO crew(surName, name, position) " +
+    private static final String SQL_INSERT = "INSERT INTO crew(name, surname, position) " +
             "VALUES(?, ?, ?)";
     private static final String SQL_FIND_ALL = "SELECT * FROM crew";
-    private static final String SQL_UPDATE = "UPDATE crew SET surName = ?, name = ?, position = ? " +
+    private static final String SQL_UPDATE = "UPDATE crew SET name = ?, surname = ?, position = ? " +
+            "WHERE id = ?";
+    private static final String SQL_UPDATE_SHIP_ID = "UPDATE crew SET ship_id = ? " +
             "WHERE id = ?";
     private static final String SQL_DELETE = "DELETE FROM crew WHERE id = ?";
 
@@ -65,8 +67,8 @@ public class CrewDao extends AbstractDao<Crew> {
     @Override
     public boolean create(Crew object) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, object.getSurName());
-            preparedStatement.setString(2, object.getName());
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setString(2, object.getSurname());
             preparedStatement.setString(3, object.getPosition());
 
             preparedStatement.execute();
@@ -79,13 +81,13 @@ public class CrewDao extends AbstractDao<Crew> {
             e.printStackTrace();
         }
         return false;
-    }//maybe really, but look later
+    }
 
     @Override
     public Crew update(Crew object) {
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE)){
-            preparedStatement.setString(1, object.getSurName());
-            preparedStatement.setString(2, object.getName());
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setString(2, object.getSurname());
             preparedStatement.setString(3, object.getPosition());
             preparedStatement.setInt(4, object.getId());
 
@@ -95,7 +97,7 @@ public class CrewDao extends AbstractDao<Crew> {
             e.printStackTrace();
         }
         return null;
-    }//maybe really, but look later
+    }
 
     @Override
     public boolean delete(Crew object) {
@@ -115,14 +117,26 @@ public class CrewDao extends AbstractDao<Crew> {
         return false;
     }
 
+    public boolean updateShipId(Crew object, int shipId){
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_SHIP_ID)) {
+            preparedStatement.setInt(1, shipId);
+            preparedStatement.setInt(2, object.getId());
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private List<Crew> parseSet(ResultSet resultSet) throws SQLException {
         List<Crew> crewList = new ArrayList<>();
 
         while(resultSet.next()){
             Crew tempCrew = new Crew();
             tempCrew.setId(resultSet.getInt("id"));
-            tempCrew.setSurName(resultSet.getString("surName"));
             tempCrew.setName(resultSet.getString("name"));
+            tempCrew.setSurname(resultSet.getString("surname"));
             tempCrew.setPosition(resultSet.getString("position"));
             crewList.add(tempCrew);
         }

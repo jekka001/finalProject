@@ -1,7 +1,6 @@
 package com.epam.cruiseCompany.model.entity.people;
 
 
-
 public class Crew extends Person{
     private String position;
 
@@ -20,8 +19,8 @@ public class Crew extends Person{
         this.position = position;
     }
 
-    public Crew(int id, String name, String surName, String position) {
-        super(id, name, surName);
+    public Crew(int id, String name, String surname, String position) {
+        super(id, name, surname);
         this.position = position;
     }
 }

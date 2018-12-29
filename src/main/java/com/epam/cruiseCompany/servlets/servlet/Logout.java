@@ -11,11 +11,12 @@ public class Logout extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         HttpSession session = req.getSession();
 
         session.removeAttribute("Email");
         session.removeAttribute("Password");
-        session.removeAttribute("role");
+        session.removeAttribute("Role");
 
         resp.sendRedirect("/");
     }

@@ -7,8 +7,8 @@ import java.sql.Connection;
 public class MySqlDaoFactory extends DaoFactory {
 
     @Override
-    public ClientDao createClientDao(Connection connection) {
-        return new ClientDao(connection);
+    public UserDao createClientDao(Connection connection) {
+        return new UserDao(connection);
     }
 
     @Override
@@ -37,7 +37,19 @@ public class MySqlDaoFactory extends DaoFactory {
     }
 
     @Override
-    public TicketDao createTicketDao(Connection connection) {
-        return new TicketDao(connection);
+    public ExcursionTicketDao createExcursionTicketDao(Connection connection) {
+        return new ExcursionTicketDao(connection);
     }
+
+    @Override
+    public CruiseTicketDao createCruiseTicketDao(Connection connection) {
+        return new CruiseTicketDao(connection);
+    }
+
+    @Override
+    public CruisePortDao createCruisePortDao(Connection connection) {
+        return new CruisePortDao(connection);
+    }
+
+
 }

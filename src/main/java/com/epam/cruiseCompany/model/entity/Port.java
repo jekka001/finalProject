@@ -1,5 +1,6 @@
 package com.epam.cruiseCompany.model.entity;
 
+
 import java.util.ArrayList;
 import java.util.List;
 

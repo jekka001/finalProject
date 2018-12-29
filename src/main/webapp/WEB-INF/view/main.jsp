@@ -6,15 +6,15 @@
     <meta charset="UTF-8">
     <meta name="author" content = "Zagrebelnyi">
     <title>CruiseCompany</title>
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/main.css">
 </head>
 <body class = "fond">
-<form method="Get" action = "/SignIn" class= "form_menu">
+<form method="Get" action = "MainMenu" class= "form_menu">
     <input type="submit" name="Menu" value="Sign in" class="field_menu">
     <input type="submit" name="Menu" value="Register" class="field_menu">
 </form>
 <div class = "main_name">CruiseCompany</div>
-<form method="Post" action ="/SignIn" class = "form_sign_in">
+<form method="Post" action ="Authorization" class = "form_sign_in">
             <span class = "info_sign_in">
             You have to hurry, the ship will depart soon
             </span>

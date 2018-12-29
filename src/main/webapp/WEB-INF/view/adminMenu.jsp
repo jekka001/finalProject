@@ -6,15 +6,10 @@
     <meta charset="UTF-8">
     <meta name="author" content = "Zagrebelnyi">
     <title>CruiseCompany</title>
-    <link rel="stylesheet" type="text/css" href="../css/Bonus.css">
-
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bonus.css">
 </head>
 <body class = "fond">
 <form method="Get" action = "" class= "form_menu">
-    <input type="submit" name="UserProfile" value="My profile" class="field_menu">
-    <input type="submit" name="UserCruise" value="My cruise" class="field_menu">
-    <input type="submit" name="ChooseCruise" value="Choose a cruise" class="field_menu">
-    <input type="submit" name="Bonus" value="My bonus" class="field_menu">
     <input type="submit" name="SignOut" value="Sign out" class="field_menu">
 </form>
 <div class = "main_name">CruiseCompany</div>
