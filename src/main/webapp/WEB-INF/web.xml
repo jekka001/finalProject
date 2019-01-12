@@ -9,7 +9,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
         <welcome-file>/WEB-INF/view/main.jsp</welcome-file>
     </welcome-file-list>
 
-    <session-config>
+<session-config>
         <session-timeout>30</session-timeout>
     </session-config>
 </web-app>

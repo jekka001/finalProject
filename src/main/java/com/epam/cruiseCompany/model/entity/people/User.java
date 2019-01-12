@@ -32,7 +32,7 @@ public class User extends Person{
 
 
     public User() {
-        this("noEmail", "noPassword", Role.NO_ROLE);
+        this( "noEmail", "noPassword", Role.NO_ROLE);
     }
 
     public User(String email, String password, Role role) {
@@ -47,4 +47,5 @@ public class User extends Person{
         this.password = password;
         this.role = role;
     }
+
 }

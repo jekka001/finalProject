@@ -3,7 +3,7 @@ package com.epam.cruiseCompany.dao.impl;
 import java.sql.Connection;
 import java.util.List;
 
-public abstract class AbstractDao<T extends Object> {
+public abstract class AbstractDao<T> {
     protected Connection connection;
 
     AbstractDao(Connection connection){

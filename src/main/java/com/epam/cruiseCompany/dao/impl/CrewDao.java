@@ -5,10 +5,10 @@ import com.epam.cruiseCompany.model.entity.people.Crew;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-// +
+
 public class CrewDao extends AbstractDao<Crew> {
-    private static final String SQL_INSERT = "INSERT INTO crew(name, surname, position) " +
-            "VALUES(?, ?, ?)";
+    private static final String SQL_INSERT = "INSERT INTO crew(id, name, surname, position) " +
+            "VALUES(?, ?, ?, ?)";
     private static final String SQL_FIND_ALL = "SELECT * FROM crew";
     private static final String SQL_UPDATE = "UPDATE crew SET name = ?, surname = ?, position = ? " +
             "WHERE id = ?";
@@ -24,6 +24,7 @@ public class CrewDao extends AbstractDao<Crew> {
     public List<Crew> findAll() {
         try(Statement statement = connection.createStatement()){
             ResultSet resultSet = statement.executeQuery(SQL_FIND_ALL);
+
             return parseSet(resultSet);
         }catch (SQLException e){
             e.printStackTrace();
@@ -33,16 +34,23 @@ public class CrewDao extends AbstractDao<Crew> {
 
     @Override
     public Crew findById(int id) {
-        return findByInt("id", id).get(0);
+        if(isExistCrew(id)) {
+            return findByInt("id", id).get(0);
+        }
+        return null;
     }
-
+    private boolean isExistCrew(int id){
+        return !findByInt("id", id).isEmpty();
+    }
     @Override
     public List<Crew> findByString(String type, String value) {
         String currentSql = getSelectQuery(type);
+
         try(PreparedStatement preparedStatement = connection.prepareStatement(currentSql)) {
             preparedStatement.setString(1, value);
 
             ResultSet resultSet = preparedStatement.executeQuery();
+
             return parseSet(resultSet);
         }catch (SQLException e){
             e.printStackTrace();
@@ -53,10 +61,12 @@ public class CrewDao extends AbstractDao<Crew> {
     @Override
     public List<Crew> findByInt(String type, int value) {
         String currentSql = getSelectQuery(type);
+
         try(PreparedStatement preparedStatement = connection.prepareStatement(currentSql)) {
             preparedStatement.setInt(1, value);
 
             ResultSet resultSet = preparedStatement.executeQuery();
+
             return parseSet(resultSet);
         }catch (SQLException e){
             e.printStackTrace();
@@ -66,16 +76,14 @@ public class CrewDao extends AbstractDao<Crew> {
 
     @Override
     public boolean create(Crew object) {
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, object.getName());
-            preparedStatement.setString(2, object.getSurname());
-            preparedStatement.setString(3, object.getPosition());
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT)) {
+            preparedStatement.setInt(1, object.getId());
+            preparedStatement.setString(2, object.getName());
+            preparedStatement.setString(3, object.getSurname());
+            preparedStatement.setString(4, object.getPosition());
 
             preparedStatement.execute();
-            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if(generatedKeys.next()) {
-                object.setId(generatedKeys.getInt("id"));
-            }
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,6 +100,7 @@ public class CrewDao extends AbstractDao<Crew> {
             preparedStatement.setInt(4, object.getId());
 
             preparedStatement.execute();
+
             return object;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,6 +119,7 @@ public class CrewDao extends AbstractDao<Crew> {
             preparedStatement.setInt(1, id);
 
             preparedStatement.execute();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,7 +131,9 @@ public class CrewDao extends AbstractDao<Crew> {
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_SHIP_ID)) {
             preparedStatement.setInt(1, shipId);
             preparedStatement.setInt(2, object.getId());
+
             preparedStatement.execute();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,15 +145,20 @@ public class CrewDao extends AbstractDao<Crew> {
         List<Crew> crewList = new ArrayList<>();
 
         while(resultSet.next()){
-            Crew tempCrew = new Crew();
-            tempCrew.setId(resultSet.getInt("id"));
-            tempCrew.setName(resultSet.getString("name"));
-            tempCrew.setSurname(resultSet.getString("surname"));
-            tempCrew.setPosition(resultSet.getString("position"));
-            crewList.add(tempCrew);
+            crewList.add(fillCrew(resultSet));
         }
+
         return crewList;
     }
+    private Crew fillCrew(ResultSet resultSet) throws SQLException{
+        Crew tempCrew = new Crew();
 
+        tempCrew.setId(resultSet.getInt("id"));
+        tempCrew.setName(resultSet.getString("name"));
+        tempCrew.setSurname(resultSet.getString("surname"));
+        tempCrew.setPosition(resultSet.getString("position"));
+
+        return tempCrew;
+    }
     private String getSelectQuery(String type){return SQL_FIND_ALL + " WHERE " + type + " = ?";}
 }

@@ -6,16 +6,16 @@
     <meta charset="UTF-8">
     <meta name="author" content = "Zagrebelnyi">
     <title>CruiseCompany</title>
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bonus.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/bonus.css">
 
 </head>
 <body class = "fond">
-<form method="Get" action = "" class= "form_menu">
-    <input type="submit" name="UserProfile" value="My profile" class="field_menu">
-    <input type="submit" name="UserCruise" value="My cruise" class="field_menu">
-    <input type="submit" name="ChooseCruise" value="Choose a cruise" class="field_menu">
-    <input type="submit" name="Bonus" value="My bonus" class="field_menu">
-    <input type="submit" name="SignOut" value="Sign out" class="field_menu">
+<form method="Get" action = "UserMenu" class= "form_menu">
+    <input type="submit" name="UserMenu" value="My profile" class="field_menu">
+    <input type="submit" name="UserMenu" value="My cruise" class="field_menu">
+    <input type="submit" name="UserMenu" value="Choose a cruise" class="field_menu">
+    <input type="submit" name="UserMenu" value="My bonus" class="field_menu">
+    <input type="submit" name="UserMenu" value="Sign out" class="field_menu">
 </form>
 <div class = "main_name">CruiseCompany</div>
 <form method="Get" action ="" class = "form_cruise">

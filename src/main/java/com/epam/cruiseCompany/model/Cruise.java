@@ -14,7 +14,7 @@ public class Cruise {
     private String cityDeparture;
     private Instant startCruise;
     private Instant durationCruise;
-    private List<Ship> ship;
+    private List<Ship> ships;
     private List<CruiseTicket> tickets;
 
     public int getId() {
@@ -53,11 +53,11 @@ public class Cruise {
     public void setDurationCruise(Instant durationCruise) {
         this.durationCruise = durationCruise;
     }
-    public List<Ship> getShip() {
-        return ship;
+    public List<Ship> getShips() {
+        return ships;
     }
-    public void setShip(List<Ship> ship) {
-        this.ship = ship;
+    public void setShips(List<Ship> ships) {
+        this.ships = ships;
     }
     public List<CruiseTicket> getTickets() {
         return tickets;
@@ -72,14 +72,14 @@ public class Cruise {
     }
 
     public Cruise(int id, String name, List<Port> ports, String cityDeparture, Instant startCruise,
-                  Instant durationCruise, List<Ship> ship, List<CruiseTicket> tickets) {
+                  Instant durationCruise, List<Ship> ships, List<CruiseTicket> tickets) {
         this.id = id;
         this.name = name;
         this.ports = ports;
         this.cityDeparture = cityDeparture;
         this.startCruise = startCruise;
         this.durationCruise = durationCruise;
-        this.ship = ship;
+        this.ships = ships;
         this.tickets = tickets;
     }
 }

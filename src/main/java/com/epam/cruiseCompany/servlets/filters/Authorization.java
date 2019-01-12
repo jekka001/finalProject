@@ -1,8 +1,7 @@
 package com.epam.cruiseCompany.servlets.filters;
 
-import com.epam.cruiseCompany.model.entity.people.Role;
 import com.epam.cruiseCompany.model.entity.people.User;
-import com.epam.cruiseCompany.service.ServiceUser;
+import com.epam.cruiseCompany.service.singIn.ServiceUser;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -13,6 +12,13 @@ import java.io.IOException;
 
 @WebFilter("/Authorization")
 public class Authorization implements Filter {
+    private HttpServletRequest req;
+    private HttpServletResponse res;
+    private String login;
+    private String password;
+    private HttpSession session;
+    private User user;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -21,42 +27,50 @@ public class Authorization implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse res = (HttpServletResponse) servletResponse;
-        String login = req.getParameter("Email");
-        String password = req.getParameter("Password");
-        HttpSession session = req.getSession();
+        req = (HttpServletRequest) servletRequest;
+        res = (HttpServletResponse) servletResponse;
 
-        ServiceUser serviceUser = new ServiceUser();
-        User user = serviceUser.isEmpty(login, password);
-        serviceUser.closeConnection();
+        getRequestData();
+        getUserData();
 
-        if (session != null && session.getAttribute("Email") != null && session.getAttribute("Password") != null) {
-            Role role = (Role)session.getAttribute("Role");
 
-            moveToMenu(req, res, role);
-        }else if(user != null){
-            Role role = user.getRole();
-            req.getSession().setAttribute("Email", login);
-            req.getSession().setAttribute("Password", password);
-            req.getSession().setAttribute("Role", role);
-
-            moveToMenu(req, res, role);
+        if (checkUserSession()) {
+            user = (User)session.getAttribute("User");
+            moveToMenu();
+        }else if(isExistUser()){
+            req.getSession().setAttribute("User", user);
+            moveToMenu();
         } else{
-            moveToMenu(req, res, Role.NO_ROLE);
-        }
-    }
-
-    private void moveToMenu(HttpServletRequest req, HttpServletResponse res, Role role) throws ServletException, IOException {
-        if(role.equals(Role.ADMIN)){
-            req.getRequestDispatcher("/WEB-INF/view/adminMenu.jsp").forward(req, res);
-        }else if(role.equals(Role.CLIENT)){
-            req.getRequestDispatcher("/WEB-INF/view/userProfile.jsp").forward(req, res);
-        }else{
+            req.setAttribute("wrong", "User does not have a database");
             req.getRequestDispatcher("/WEB-INF/view/main.jsp").forward(req, res);
         }
     }
+    private void getRequestData(){
+        login = req.getParameter("Email");
+        password = req.getParameter("Password");
+        session = req.getSession();
+    }
+    private void getUserData(){
+        ServiceUser serviceUser = new ServiceUser();
+        user = serviceUser.getUser(login, password);
+        serviceUser.closeConnection();
+    }
+    private boolean checkUserSession(){
+        return session != null && session.getAttribute("User") != null;
+    }
+    private boolean isExistUser(){
+        return user != null;
+    }
+    private void moveToMenu() throws ServletException, IOException {
+        switch (user.getRole()){
+            case ADMIN:
+                req.getRequestDispatcher("/WEB-INF/view/adminMenu.jsp").forward(req, res);
+                break;
+            case CLIENT:
+                req.getRequestDispatcher("UserMenu").forward(req, res);
 
+        }
+    }
     @Override
     public void destroy() {
 

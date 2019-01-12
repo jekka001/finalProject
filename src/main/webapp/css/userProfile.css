@@ -40,6 +40,10 @@
 	padding: 5% 10%;
 	color:	#DCF900;
 }
+.wrong_change{
+	font-family: sans-serif;
+	color:orange;
+}
 .field_change{
 	border: none;
 	border-radius: 5px;

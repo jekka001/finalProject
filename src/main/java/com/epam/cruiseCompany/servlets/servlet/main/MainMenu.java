@@ -1,4 +1,4 @@
-package com.epam.cruiseCompany.servlets.servlet;
+package com.epam.cruiseCompany.servlets.servlet.main;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,11 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 @WebServlet("/MainMenu")
 public class MainMenu extends HttpServlet {
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -38,6 +38,10 @@
     padding: 5% 10%;
     color:	#DCF900;
 }
+.wrong_sign_in{
+    font-family: sans-serif;
+    color:orange;
+}
 .field_sign_in{
     border: none;
     border-radius: 5px;

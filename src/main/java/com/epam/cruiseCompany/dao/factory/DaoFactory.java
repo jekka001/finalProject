@@ -16,17 +16,19 @@ public abstract class DaoFactory {
     public abstract ShipDao createShipDao(Connection connection);
     public abstract ExcursionTicketDao createExcursionTicketDao(Connection connection);
     public abstract CruiseTicketDao createCruiseTicketDao(Connection connection);
-    public abstract CruisePortDao createCruisePortDao(Connection connection);
 
     public static DaoFactory getInstance(){
-        if(daoFactory == null){
+        if(isExistDaoFactory(daoFactory)){
             synchronized (DaoFactory.class){
-                if(daoFactory == null){
-                    DaoFactory temp = new MySqlDaoFactory();
-                    daoFactory = temp;
+                if(isExistDaoFactory(daoFactory)){
+                    daoFactory = new MySqlDaoFactory();
                 }
             }
         }
         return daoFactory;
+    }
+
+    private static boolean isExistDaoFactory(DaoFactory daoFactory){
+        return daoFactory == null;
     }
 }

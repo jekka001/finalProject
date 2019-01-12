@@ -6,19 +6,19 @@
     <meta charset="UTF-8">
     <meta name="author" content = "Zagrebelnyi">
     <title>CruiseCompany</title>
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/chooseCruise.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/chooseCruise.css">
 
 </head>
 <body class = "fond">
-<form method="Get" action = "" class= "form_menu">
-    <input type="submit" name="UserProfile" value="My profile" class="field_menu">
-    <input type="submit" name="UserCruise" value="My cruise" class="field_menu">
-    <input type="submit" name="ChooseCruise" value="Choose a cruise" class="field_menu">
-    <input type="submit" name="Bonus" value="My bonus" class="field_menu">
-    <input type="submit" name="SignOut" value="Sign out" class="field_menu">
+<form method="Get" action = "UserMenu" class= "form_menu">
+    <input type="submit" name="UserMenu" value="My profile" class="field_menu">
+    <input type="submit" name="UserMenu" value="My cruise" class="field_menu">
+    <input type="submit" name="UserMenu" value="Choose a cruise" class="field_menu">
+    <input type="submit" name="UserMenu" value="My bonus" class="field_menu">
+    <input type="submit" name="UserMenu" value="Sign out" class="field_menu">
 </form>
 <div class = "main_name">CruiseCompany</div>
-<form method="Get" action ="" class = "form_cruise">
+<form method="Get" action ="ChooseCruise" class = "form_cruise">
             <span class = "info_cruise">
                 You feel this air, and the rays of the sun, you will soon be resting. Have you dream about it?
             </span>
@@ -29,116 +29,32 @@
             <th class="table_column">Start Cruise</th>
             <th class="table_column">Duration Cruise</th>
             <th class="table_column">Name Ship</th>
-            <th class="table_column">Ticket Class</th>
             <th class="table_column">Ticket Id</th>
+            <th class="table_column">Ticket Class</th>
+            <th class="table_column">Ticket Price</th>
             <th class="table_column">Action</th>
         </tr>
-        <!--цикл на кількість круїзів -->
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
-        <tr>
-            <td class="table_column">Cruise</td>
-            <td class="table_column">Kiev</td>
-            <td class="table_column">12.12.12</td>
-            <td class="table_column">5 days</td>
-            <td class="table_column">Caterina</td>
-            <td class="table_column">Lux</td>
-            <td class="table_column">1</td>
-            <td><input type="submit" name="Action" value="Buy" class="button_refuse"></td>
-        </tr>
+        <c:forEach items="${tickets}" var = "ticket" >
+            <tr>
+                <form method="Get" action ="ChooseCruise" class = "form_cruise">
+                    <td class="table_column"><c:out value="${ticket.nameCruise}" /></td>
+                    <td class="table_column"><c:out value="${ticket.cityDeparture}" /></td>
+                    <td class="table_column"><c:out value="${ticket.startCruise}" /></td>
+                    <td class="table_column"><c:out value="${ticket.durationCruise}" /></td>
+                    <td class="table_column"><c:out value="${ticket.nameShip}" /></td>
+                    <td class="table_column"><c:out value="${ticket.ticketId}" /></td>
+                    <td class="table_column"><c:out value="${ticket.ticketClass}" /></td>
+                    <td class="table_column"><c:out value="${ticket.ticketPrice}" /></td>
+                    <input type="hidden" name="TicketId" value="<c:out value="${ticket.ticketId}" />">
+                    <td><input type="submit" name="Operation" value="Buy" class="button_refuse"></td>
+                </form>
+            </tr>
+        </c:forEach>
     </table>
-    <input type="submit" name="Previous" value="Previous 10" class="button_previous">
-    <input type="text" name="Find_Name" maxlength="20" placeholder="Name Cruise" class = "field_find">
-    <input type="submit" name="Find" value="Find" class = "button_find">
-    <input type="submit" name="Next" value="Next 10" class="button_next">
+    <input type="submit" name="Operation" value="Previous 10" class="button_previous">
+    <input type="text" name="OperationText" maxlength="20" placeholder="Name cruise" class = "field_find">
+    <input type="submit" name="Operation" value="Find" class = "button_find">
+    <input type="submit" name="Operation" value="Next 10" class="button_next">
 </form>
 </body>
 <html>

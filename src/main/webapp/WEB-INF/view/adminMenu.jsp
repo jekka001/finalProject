@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="author" content = "Zagrebelnyi">
     <title>CruiseCompany</title>
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bonus.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/bonus.css">
 </head>
 <body class = "fond">
 <form method="Get" action = "" class= "form_menu">

@@ -46,10 +46,4 @@ public class MySqlDaoFactory extends DaoFactory {
         return new CruiseTicketDao(connection);
     }
 
-    @Override
-    public CruisePortDao createCruisePortDao(Connection connection) {
-        return new CruisePortDao(connection);
-    }
-
-
 }

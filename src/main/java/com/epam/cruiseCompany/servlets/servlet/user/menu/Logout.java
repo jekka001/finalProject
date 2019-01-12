@@ -1,12 +1,14 @@
-package com.epam.cruiseCompany.servlets.servlet;
+package com.epam.cruiseCompany.servlets.servlet.user.menu;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@WebServlet("/Logout")
 public class Logout extends HttpServlet {
 
     @Override
@@ -14,9 +16,7 @@ public class Logout extends HttpServlet {
 
         HttpSession session = req.getSession();
 
-        session.removeAttribute("Email");
-        session.removeAttribute("Password");
-        session.removeAttribute("Role");
+        session.removeAttribute("User");
 
         resp.sendRedirect("/");
     }
